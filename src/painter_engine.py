@@ -9,15 +9,15 @@ def quantize_colors_kmeans(image_bgr, num_colors=12):
     Quantizes an input BGR image into num_colors dominant colors using K-Means clustering.
     Returns: (quantized_image_bgr, palette_rgb_list, labels_2d, centers_bgr)
     """
-    h, w, c = image_bgr.shape
-    pixels = image_bgr.reshape((-1, 3)).astype(np.float32)
+    h, w, _ = image_bgr.shape
+    pixels = np.ascontiguousarray(image_bgr.reshape((-1, 3)), dtype=np.float32)
 
     criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.5)
     flags = cv2.KMEANS_PP_CENTERS
 
-    compactness, labels, centers = cv2.kmeans(pixels, num_colors, None, criteria, 10, flags)
+    _, labels, centers = cv2.kmeans(pixels, int(num_colors), None, criteria, 10, flags)
 
-    centers_uint8 = np.uint8(centers)
+    centers_uint8 = centers.astype(np.uint8)
     quantized_pixels = centers_uint8[labels.flatten()]
     quantized_image = quantized_pixels.reshape((h, w, 3))
 
@@ -68,10 +68,10 @@ def generate_fill_strokes_for_mask(mask, step=2):
                 stroke = []
                 if direction == 1:
                     for x in range(s_x, e_x + 1):
-                        stroke.append((int(x), int(y)))
+                        stroke.append((x, y))
                 else:
                     for x in range(e_x, s_x - 1, -1):
-                        stroke.append((int(x), int(y)))
+                        stroke.append((x, y))
                 if stroke:
                     row_strokes.append(stroke)
 
@@ -147,7 +147,7 @@ def generate_full_painting_layers(image_path, num_colors=12, fill_step=2, min_re
         if is_near_white(rgb_color):
             continue
 
-        mask = np.uint8(labels_2d == k) * 255
+        mask = (labels_2d == k).astype(np.uint8) * 255
 
         # Remove tiny regions that would be noise
         num_labels, labels_im, stats, centroids = cv2.connectedComponentsWithStats(mask)

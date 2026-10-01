@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import os
 import math
+from typing import TypedDict, List, Tuple, Dict, Any, Optional
 import colorama
 from colorama import Fore, Style
 try:
@@ -11,7 +12,14 @@ except ImportError:
 
 colorama.init(autoreset=True)
 
-INSTAGRAM_DEFAULT_PALETTE = [
+
+class PaletteItem(TypedDict):
+    name: str
+    rgb: Tuple[int, int, int]
+    pct: float
+
+
+INSTAGRAM_DEFAULT_PALETTE: List[PaletteItem] = [
     {"name": "Đen (Black)", "rgb": (0, 0, 0), "pct": 0.05},
     {"name": "Xanh dương (Blue)", "rgb": (0, 149, 246), "pct": 0.16},
     {"name": "Xanh lá (Green)", "rgb": (9, 187, 95), "pct": 0.28},
@@ -24,8 +32,8 @@ INSTAGRAM_DEFAULT_PALETTE = [
 ]
 
 
-def rgb_to_lab(rgb_color):
-    bgr_pixel = np.uint8([[[rgb_color[2], rgb_color[1], rgb_color[0]]]])
+def rgb_to_lab(rgb_color: Tuple[int, int, int]) -> np.ndarray:
+    bgr_pixel = np.array([[[rgb_color[2], rgb_color[1], rgb_color[0]]]], dtype=np.uint8)
     lab_pixel = cv2.cvtColor(bgr_pixel, cv2.COLOR_BGR2LAB)
     return lab_pixel[0][0].astype(np.float32)
 
@@ -234,7 +242,8 @@ def generate_sketch_contours(
             if optimize_path:
                 group_contours = sort_contours_greedy(group_contours)
 
-            bgr_color = (swatch_info["rgb"][2], swatch_info["rgb"][1], swatch_info["rgb"][0])
+            rgb_val = swatch_info["rgb"]
+            bgr_color = (int(rgb_val[2]), int(rgb_val[1]), int(rgb_val[0]))
             for cnt in group_contours:
                 if len(cnt) > 1:
                     pts = np.array(cnt, dtype=np.int32).reshape((-1, 1, 2))

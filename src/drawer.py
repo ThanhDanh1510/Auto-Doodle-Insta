@@ -54,6 +54,7 @@ else:
 #   x=0.500: #5 Cam (Orange)
 #   x=0.625: #6 Đỏ san hồ (Coral)
 #   x=0.750: #7 Hồng đậm (Magenta)   ← DEEP PINK / LILY ACCENTS
+#   x=0.875: #8 Tím (Purple)
 #   x=1.000: #9 Đỏ (Red)
 #
 # PAGE 2 (Warm) Swatch Positions (9 swatches, spacing = 0.125):
