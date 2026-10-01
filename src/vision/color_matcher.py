@@ -36,7 +36,7 @@ def sample_contour_color(image_bgr: np.ndarray, contour: ContourPoints) -> RGBCo
     step = max(1, len(contour) // 20)
     for i in range(0, len(contour), step):
         pt = contour[i]
-        px, py = int(pt[0]), int(pt[1])
+        px, py = pt[0], pt[1]
         if 0 <= px < w and 0 <= py < h:
             bgr = image_bgr[py, px]
             sampled_colors.append((int(bgr[2]), int(bgr[1]), int(bgr[0])))

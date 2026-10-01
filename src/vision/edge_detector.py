@@ -2,7 +2,7 @@
 Edge detection filters and raw contour extraction algorithms.
 """
 
-from typing import Tuple, List, Sequence
+from typing import Sequence, Tuple
 import cv2
 import numpy as np
 
@@ -13,13 +13,14 @@ def extract_raw_contours(
     canny_lower: int = 50,
     canny_upper: int = 150,
     blur_kernel: int = 5,
-) -> Sequence[np.ndarray]:
+) -> Tuple[Sequence[np.ndarray], int]:
     """
     Applies image preprocessing and extracts raw contours based on the selected edge mode.
     Modes: "canny", "bilateral", "adaptive".
+    Returns: (raw_contours, original_point_count)
     """
     gray = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2GRAY)
-    blur_k = max(1, int(blur_kernel))
+    blur_k = max(1, blur_kernel)
     if blur_k % 2 == 0:
         blur_k += 1
 
@@ -38,4 +39,5 @@ def extract_raw_contours(
         edges = cv2.Canny(blurred, canny_lower, canny_upper)
 
     raw_contours, _ = cv2.findContours(edges, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
-    return raw_contours
+    original_point_count = sum(len(c) for c in raw_contours)
+    return raw_contours, original_point_count

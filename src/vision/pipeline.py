@@ -70,8 +70,8 @@ def generate_sketch_contours(
             log_status(f"{Fore.RED}Error: Full painting generation failed.")
             return None, None, None, None
 
-        total_contours = sum(len(g["contours"]) for g in layers)
-        total_points = sum(sum(len(c) for c in g["contours"]) for g in layers)
+        total_contours = int(sum(len(g["contours"]) for g in layers))
+        total_points = int(sum(sum(len(c) for c in g["contours"]) for g in layers))
 
         stats: ProcessStats = {
             "total_contours": total_contours,
@@ -89,7 +89,7 @@ def generate_sketch_contours(
         return None, None, None, None
 
     img_height, img_width, _ = image_bgr.shape
-    img_info: ImageInfo = {
+    img_info_data: ImageInfo = {
         "height": img_height,
         "width": img_width,
         "center_x": img_width / 2.0,
@@ -167,16 +167,17 @@ def generate_sketch_contours(
                 "contours": group_contours,
             })
 
-    total_contours = sum(len(g["contours"]) for g in color_groups)
-    simplified_point_count = sum(sum(len(c) for c in g["contours"]) for g in color_groups)
+    total_contours = int(sum(len(g["contours"]) for g in color_groups))
+    simplified_point_count = int(sum(sum(len(c) for c in g["contours"]) for g in color_groups))
+    orig_pts = int(original_point_count)
     reduction = 0.0
-    if original_point_count > 0:
-        reduction = (1.0 - (simplified_point_count / original_point_count)) * 100.0
+    if orig_pts > 0:
+        reduction = float((1.0 - (float(simplified_point_count) / float(orig_pts))) * 100.0)
 
-    stats: ProcessStats = {
+    stats_data: ProcessStats = {
         "total_contours": total_contours,
         "color_groups_count": len(color_groups),
-        "original_points": original_point_count,
+        "original_points": orig_pts,
         "simplified_points": simplified_point_count,
         "reduction_percent": round(reduction, 1),
     }
@@ -186,4 +187,4 @@ def generate_sketch_contours(
         f"{simplified_point_count} points."
     )
 
-    return color_groups, img_info, preview_canvas, stats
+    return color_groups, img_info_data, preview_canvas, stats_data

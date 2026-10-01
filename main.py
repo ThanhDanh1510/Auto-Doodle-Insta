@@ -31,6 +31,7 @@ if SRC_DIR not in sys.path:
 if BASE_DIR not in sys.path:
     sys.path.insert(0, BASE_DIR)
 
+from src.core.models import ImageInfo, ProcessStats
 from src.automation import FastDrawer
 from src.vision import generate_sketch_contours
 
@@ -39,8 +40,8 @@ canvas_info: Optional[Tuple[int, int, int, int, float, float]] = None
 color_bar_info: Optional[Tuple[int, int, int, int, int, int]] = None
 selected_image_path: str = ""
 current_color_groups: List[Dict[str, Any]] = []
-current_img_info: Optional[Dict[str, Any]] = None
-current_stats: Optional[Dict[str, Any]] = None
+current_img_info: Optional[ImageInfo] = None
+current_stats: Optional[ProcessStats] = None
 console_queue: queue.Queue = queue.Queue()
 
 

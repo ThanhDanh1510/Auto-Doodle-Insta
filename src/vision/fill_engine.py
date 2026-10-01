@@ -10,10 +10,10 @@ import cv2
 import numpy as np
 
 try:
-    from src.core.models import ContourPoints
+    from src.core.models import ContourPoints, ImageInfo
     from src.vision.quantizer import is_near_white, quantize_colors_kmeans
 except (ImportError, ModuleNotFoundError):
-    from core.models import ContourPoints  # type: ignore
+    from core.models import ContourPoints, ImageInfo  # type: ignore
     from vision.quantizer import is_near_white, quantize_colors_kmeans  # type: ignore
 
 
@@ -86,7 +86,7 @@ def generate_full_painting_layers(
     num_colors: int = 12,
     fill_step: int = 2,
     min_region_area: int = 20,
-) -> Tuple[Optional[List[Dict[str, Any]]], Optional[Dict[str, Any]], Optional[np.ndarray]]:
+) -> Tuple[Optional[List[Dict[str, Any]]], Optional[ImageInfo], Optional[np.ndarray]]:
     """
     Generates full multi-color painting reconstruction layers.
     
@@ -107,7 +107,7 @@ def generate_full_painting_layers(
         return None, None, None
 
     img_h, img_w, _ = image_bgr.shape
-    img_info = {
+    img_info: ImageInfo = {
         "height": img_h,
         "width": img_w,
         "center_x": img_w / 2.0,

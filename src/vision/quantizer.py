@@ -26,7 +26,7 @@ def quantize_colors_kmeans(
     flags = cv2.KMEANS_PP_CENTERS
     best_labels = np.empty((0, 1), dtype=np.int32)
 
-    _, labels, centers = cv2.kmeans(pixels, int(num_colors), best_labels, criteria, 10, flags)
+    _, labels, centers = cv2.kmeans(pixels, num_colors, best_labels, criteria, 10, flags)
 
     centers_uint8 = centers.astype(np.uint8)
     quantized_pixels = centers_uint8[labels.flatten()]
