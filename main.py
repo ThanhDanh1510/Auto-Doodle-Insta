@@ -365,12 +365,12 @@ class AutoDoodleApp:
         # Parse spectrum page from combobox "1 - Rainbow" -> 1
         spec_page_str = self.combo_spectrum_page.get()
         config["spectrum_page"] = int(spec_page_str[0]) if spec_page_str else 2
-        config["num_painting_colors"] = int(self.var_num_colors.get())
+        config["num_painting_colors"] = self.var_num_colors.get()
         config["edge_mode"] = self.combo_mode.get()
-        config["canny_lower"] = int(self.var_canny_lower.get())
-        config["canny_upper"] = int(self.var_canny_upper.get())
+        config["canny_lower"] = self.var_canny_lower.get()
+        config["canny_upper"] = self.var_canny_upper.get()
         config["epsilon"] = round(float(self.var_epsilon.get()), 2)
-        config["min_contour_length"] = int(self.var_min_len.get())
+        config["min_contour_length"] = self.var_min_len.get()
         config["optimize_path"] = self.var_optimize.get()
         config["fast_drawing_mode"] = self.var_fast_mode.get()
         save_config()
@@ -411,7 +411,7 @@ class AutoDoodleApp:
             num_painting_colors=config.get("num_painting_colors", 8)
         )
 
-        if groups is None:
+        if groups is None or img_info is None or preview_img is None or stats is None:
             self.lbl_status.config(text="Status: Image processing failed.")
             return
 
