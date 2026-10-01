@@ -24,11 +24,28 @@ Auto-Doodle-Insta/
 │   ├── configuration.md             # config.json reference & presets
 │   └── index.md                     # Documentation index
 │
-├── src/                             # Core Python modules
-│   ├── __init__.py
-│   ├── drawer.py                    # Win32 Native Fast Mouse Engine & Color Swatch Navigator
-│   ├── image_processor.py           # Canny Edge, RDP Simplification & TSP Path Optimizer
-│   └── painter_engine.py            # Color Quantization, Slicing & Spectrum Mapping Engine
+├── src/                             # Core Python modules & Modular Subpackages
+│   ├── core/                        # Data models, types & shared constants
+│   │   ├── __init__.py
+│   │   ├── constants.py             # Instagram color palettes & spectrum enums
+│   │   └── models.py                # TypedDicts (Point2D, ContourPoints, LayerInfo, ...)
+│   ├── vision/                      # Computer vision & image processing algorithms
+│   │   ├── __init__.py
+│   │   ├── quantizer.py             # K-Means color quantization & white masking
+│   │   ├── edge_detector.py         # Canny, Bilateral & Adaptive edge extraction
+│   │   ├── simplifier.py            # Ramer-Douglas-Peucker (RDP) contour reduction
+│   │   ├── optimizer.py             # Greedy TSP stroke sequencing optimizer
+│   │   ├── color_matcher.py         # CIE-Lab perceptual Delta-E color distance
+│   │   ├── fill_engine.py           # Dense zig-zag scanline region filler
+│   │   └── pipeline.py              # High-level sketch extraction pipeline
+│   ├── automation/                  # Hardware automation & OS mouse control
+│   │   ├── __init__.py
+│   │   ├── input_driver.py          # Fast Win32 mouse_event / PyAutoGUI driver
+│   │   ├── spectrum_navigator.py    # Instagram 3-Page gradient spectrum mapper
+│   │   └── stroke_executor.py       # FastDrawer canvas stroke execution engine
+│   ├── drawer.py                    # Backward-compatible facade to src.automation
+│   ├── image_processor.py           # Backward-compatible facade to src.vision & src.core
+│   └── painter_engine.py            # Backward-compatible facade to src.vision
 │
 ├── tests/                           # Unit tests, color analysis & lab experiment scripts
 │   ├── __init__.py

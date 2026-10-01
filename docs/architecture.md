@@ -17,23 +17,19 @@ graph TB
         Calib_Manager["Canvas & Color Bar Calibration Manager"]
     end
 
-    subgraph Core_Engine["🧠 Tầng Xử Lý Thuật Toán (Core Processing Layer)"]
-        Image_Proc["image_processor.py<br/>- Canny / Bilateral / Adaptive<br/>- RDP Simplification<br/>- Greedy TSP Path Optimizer"]
-        Painter_Eng["painter_engine.py<br/>- K-Means Quantization<br/>- Morphological Filter & Connected Components<br/>- Dense Zig-Zag Scanline Fill"]
+    subgraph Core_Engine["🧠 Tầng Xử Lý & Thuật Toán (Core & Vision Subpackages)"]
+        Core_Models["src/core/<br/>- models.py (Point2D, Contour, ColorGroup, LayerInfo)<br/>- constants.py (Instagram Palettes, SpectrumPage)"]
+        Vision_Mod["src/vision/<br/>- quantizer.py (K-Means & Mask Filtering)<br/>- edge_detector.py (Canny, Bilateral, Adaptive)<br/>- simplifier.py (RDP Polygon Simplification)<br/>- optimizer.py (Greedy TSP Nearest-Neighbor)<br/>- fill_engine.py (Dense Scanline Zig-Zag Filling)<br/>- pipeline.py (High-level Pipeline Facade)"]
     end
 
-    subgraph Hardware_Automation["⚡ Tầng Tự Động Hóa Phần Cứng (Hardware Automation Layer)"]
-        Drawer["src/drawer.py (FastDrawer)"]
-        Win32_Driver["Win32 Native API (user32.mouse_event)"]
-        Spectrum_Nav["Instagram Spectrum Swatch & Popover Navigator"]
+    subgraph Hardware_Automation["⚡ Tầng Tự Động Hóa (Automation Subpackage)"]
+        Auto_Mod["src/automation/<br/>- input_driver.py (Win32 Native API user32.mouse_event)<br/>- spectrum_navigator.py (Instagram 3-Page Hue-to-X/Y Popover Navigation)<br/>- stroke_executor.py (FastDrawer Execution Engine)"]
         Key_Hooks["Keyboard Global Hotkeys (SPACE, Q)"]
     end
 
     UI_Window --> Core_Engine
-    Core_Engine --> Drawer
-    Drawer --> Win32_Driver
-    Drawer --> Spectrum_Nav
-    Key_Hooks -.->|Ngắt / Tạm dừng| Drawer
+    Core_Engine --> Hardware_Automation
+    Key_Hooks -.->|Ngắt / Tạm dừng| Hardware_Automation
 ```
 
 ---
