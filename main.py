@@ -5,6 +5,8 @@ import json
 import queue
 import re
 import threading
+from typing import Optional, Tuple, List, Dict, Any
+
 import cv2
 import numpy as np
 import pyautogui
@@ -14,9 +16,13 @@ from PIL import Image, ImageTk
 
 import tkinter as tk
 from tkinter import filedialog, messagebox
-import ttkbootstrap as ttk
-from ttkbootstrap.constants import *
 from tkinter.scrolledtext import ScrolledText
+import ttkbootstrap as ttk
+from ttkbootstrap.constants import (
+    BOTH, HORIZONTAL, LEFT, RIGHT, X, Y, SUNKEN,
+    INFO, SUCCESS, DANGER, SECONDARY, PRIMARY, WARNING,
+    W, E, CENTER, DISABLED, NORMAL, WORD, END
+)
 
 # Ensure src directory is on sys.path
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -24,17 +30,21 @@ SRC_DIR = os.path.join(BASE_DIR, 'src')
 if SRC_DIR not in sys.path:
     sys.path.insert(0, SRC_DIR)
 
-import image_processor
-from drawer import FastDrawer
+try:
+    from src import image_processor
+    from src.drawer import FastDrawer
+except ImportError:
+    import image_processor  # type: ignore
+    from drawer import FastDrawer  # type: ignore
 
-config = {}
-canvas_info = None      # (x1, y1, w, h, center_x, center_y)
-color_bar_info = None   # (spec_x1, spec_y1, spec_w, spec_h)
-selected_image_path = ""
-current_color_groups = []
-current_img_info = None
-current_stats = None
-console_queue = queue.Queue()
+config: Dict[str, Any] = {}
+canvas_info: Optional[Tuple[int, int, int, int, float, float]] = None
+color_bar_info: Optional[Tuple[int, int, int, int, int, int]] = None
+selected_image_path: str = ""
+current_color_groups: List[Dict[str, Any]] = []
+current_img_info: Optional[Dict[str, Any]] = None
+current_stats: Optional[Dict[str, Any]] = None
+console_queue: queue.Queue = queue.Queue()
 
 
 class QueueRedirector:
@@ -571,23 +581,29 @@ class AutoDoodleApp:
 
     def _run_drawing(self):
         try:
+            if not canvas_info or not current_img_info or not current_color_groups:
+                self.update_status("Error: Canvas or image data not ready.")
+                return
+
             canvas_x, canvas_y, canvas_w, canvas_h, canvas_cx, canvas_cy = canvas_info
 
             print("\n--- STARTING FULL IMAGE RECONSTRUCTION PAINTING ---")
             self.update_status("Locating 'plus' icon in Instagram DM...")
             plus_coords = locate_robust(config.get('plus_icons', []))
 
-            if plus_coords:
-                pyautogui.click(plus_coords)
+            if plus_coords is not None:
+                pyautogui.click(plus_coords.x, plus_coords.y)
                 time.sleep(0.5)
-                pyautogui.click(plus_coords.x, plus_coords.y - config.get('draw_button_y_offset', 75))
+                y_offset = int(config.get('draw_button_y_offset', 75))
+                pyautogui.click(plus_coords.x, plus_coords.y - y_offset)
                 self.update_status("Drawing interface opened.")
                 time.sleep(1)
 
             self.update_status("Locating thickness slider...")
             thickness_coords = locate_robust(config.get('slider_handles', []))
-            if thickness_coords:
-                pyautogui.click(thickness_coords.x, thickness_coords.y + config.get('thickness_adjust_y_offset', 20))
+            if thickness_coords is not None:
+                th_offset = int(config.get('thickness_adjust_y_offset', 20))
+                pyautogui.click(thickness_coords.x, thickness_coords.y + th_offset)
                 self.update_status("Brush thickness set.")
                 time.sleep(0.5)
 
