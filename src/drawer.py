@@ -54,8 +54,9 @@ else:
 #   x=0.500: #5 Cam (Orange)
 #   x=0.625: #6 Đỏ san hồ (Coral)
 #   x=0.750: #7 Hồng đậm (Magenta)   ← DEEP PINK / LILY ACCENTS
-#   x=0.875: #8 Tím (Purple)
-#   x=1# PAGE 2 (Warm) Swatch Positions (9 swatches, spacing = 0.125):
+#   x=1.000: #9 Đỏ (Red)
+#
+# PAGE 2 (Warm) Swatch Positions (9 swatches, spacing = 0.125):
 #   x=0.000: #1 Hồng đất (Dusty Rose)     ← PETALS SOFT DUSTY PINK (x=0.02-0.12, y=0.50-0.70)
 #   x=0.125: #2 Hồng phấn (Pale Pink)
 #   x=0.250: #3 Beige nhạt (Cream Beige)
