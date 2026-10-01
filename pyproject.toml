@@ -17,3 +17,9 @@ dependencies = [
 
 [tool.uv]
 package = false
+
+[tool.pyright]
+venvPath = "."
+venv = ".venv"
+extraPaths = ["src", "."]
+

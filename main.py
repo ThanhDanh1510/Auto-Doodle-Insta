@@ -23,18 +23,16 @@ from tkinter.constants import (
     W, E, CENTER, DISABLED, NORMAL, WORD, END
 )
 
-# Ensure src directory is on sys.path
+# Ensure src and project root directory are on sys.path
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 SRC_DIR = os.path.join(BASE_DIR, 'src')
 if SRC_DIR not in sys.path:
     sys.path.insert(0, SRC_DIR)
+if BASE_DIR not in sys.path:
+    sys.path.insert(0, BASE_DIR)
 
-try:
-    from src import image_processor
-    from src.drawer import FastDrawer
-except ImportError:
-    import image_processor  # type: ignore
-    from drawer import FastDrawer  # type: ignore
+import image_processor
+from drawer import FastDrawer
 
 config: Dict[str, Any] = {}
 canvas_info: Optional[Tuple[int, int, int, int, float, float]] = None
