@@ -243,7 +243,7 @@ def generate_sketch_contours(
                 group_contours = sort_contours_greedy(group_contours)
 
             rgb_val = swatch_info["rgb"]
-            bgr_color = (int(rgb_val[2]), int(rgb_val[1]), int(rgb_val[0]))
+            bgr_color = (rgb_val[2], rgb_val[1], rgb_val[0])
             for cnt in group_contours:
                 if len(cnt) > 1:
                     pts = np.array(cnt, dtype=np.int32).reshape((-1, 1, 2))
