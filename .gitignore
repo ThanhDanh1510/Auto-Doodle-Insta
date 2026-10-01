@@ -1,4 +1,25 @@
+# Byte-compiled / optimized / DLL files
 __pycache__/
 **/__pycache__/
+*.py[cod]
+*$py.class
+
+# Output & temporary renders
+outputs/
+*.tmp
+*.log
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
 
 

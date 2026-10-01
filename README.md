@@ -1,60 +1,95 @@
-# AutoDoodle - Instagram DM Drawing Bot
+# Auto-Doodle-Insta
 
-AutoDoodle is a Python bot that automatically draws any image as a sketch directly inside **Instagram DMs**.
+Auto-Doodle-Insta (AutoDoodle Pro) is an optimized, high-performance Python application that automatically draws any image as a vector sketch or full-spectrum colored painting directly inside **Instagram DMs** (or any other canvas app running on an Android emulator like BlueStacks).
 
-It uses a modern GUI control panel to manage the entire process, from file selection to calibration, and includes an embedded console for status updates. It is designed to run on a PC using an **Android emulator** (e.g., BlueStacks) with the Instagram app running.
+---
 
-## 1. What You Need Before You Start
+## 🏗️ Project Architecture (Cấu trúc dự án)
 
-1.  **Python (and Pip)**: [https://www.python.org/downloads/](https://www.python.org/downloads/)
-    *(During installation, make sure to check the box that says "Add Python to PATH")*
-2.  **Git**: [https://git-scm.com/downloads](https://git-scm.com/downloads)
-3.  **Android Emulator (BlueStacks Recommended)**: [https://www.bluestacks.com/](https://www.bluestacks.com/)
-4.  **Instagram App**: Installed *inside* your emulator and logged in.
+```text
+Auto-Doodle-Insta/
+├── assets/                          # Graphic & UI static resources
+│   ├── icons/                       # App icons & bot template matching images
+│   │   ├── icon.ico                 # App Window Icon
+│   │   ├── draw_button.png          # Template for draw button detection
+│   │   ├── plus_icon.png            # Template for '+' button detection
+│   │   ├── thickness_slider_handle.png
+│   │   └── thickness_slider_handle_alt.png
+│   └── samples/                     # Test & sample images
+│       └── Lily.png
+│
+├── docs/                            # Full technical documentation & module guides
+│   ├── modules/                     # Detailed module docs (drawer, painter_engine, ...)
+│   ├── architecture.md              # System architecture & coordinate systems
+│   ├── configuration.md             # config.json reference & presets
+│   └── index.md                     # Documentation index
+│
+├── src/                             # Core Python modules
+│   ├── __init__.py
+│   ├── drawer.py                    # Win32 Native Fast Mouse Engine & Color Swatch Navigator
+│   ├── image_processor.py           # Canny Edge, RDP Simplification & TSP Path Optimizer
+│   └── painter_engine.py            # Color Quantization, Slicing & Spectrum Mapping Engine
+│
+├── tests/                           # Unit tests, color analysis & lab experiment scripts
+│   ├── __init__.py
+│   ├── list_preview_colors.py
+│   ├── test_mapping.py
+│   ├── test_hybrid_mode.py
+│   ├── test_layer_pages.py
+│   └── ...
+│
+├── outputs/                         # Output renders, previews & test artifacts (git-ignored)
+│   ├── preview_quantized.png
+│   ├── sketch.png
+│   └── sketch_*.png
+│
+├── main.py                          # GUI Application Entry Point (Tkinter / ttkbootstrap)
+├── config.json                      # Bot & drawing configurations
+├── requirements.txt                 # Dependencies
+└── README.md                        # Documentation
+```
 
-## 2. Installation
+> 📖 **Xem toàn bộ tài liệu kỹ thuật chuyên sâu tại**: [docs/index.md](file:///d:/AutoDoodle/docs/index.md)
 
-1.  **Clone the repository:**
-    ```sh
-    git clone https://github.com/JakubSdf/AutoDoodle.git
-    ```
-2.  **Move into the folder and install libraries:**
-    ```sh
-    cd AutoDoodle
-    pip install -r requirements.txt
-    ```
-    *(This will install `pyautogui`, `opencv-python`, `ttkbootstrap`, and all other required libraries.)*
+---
 
-## 3. Configuration
+## Key Features & Speed Improvements
 
-1.  **`config.json`:**
-    * Open `config.json` in a text editor.
-    * Review all settings. You can add your own UI-matching images (like `plus_icon_dark.png`) to the lists. The script will *not* crash if an image is missing; it will just print a warning and skip it.
-    * Set the hotkeys (`stop_key`, `pause_key`) to your preference.
+- **⚡ Win32 Native Fast Drawing Engine (`src/drawer.py`)**: Uses Windows direct API calls (`mouse_event` / `SendInput`) to execute mouse strokes **10x–50x faster** than PyAutoGUI.
+- **🎨 Full-Spectrum Multi-Layer Painting (`src/painter_engine.py`)**: K-Means clustering color quantization with automatic Instagram DM palette spectrum mapping.
+- **📉 Ramer-Douglas-Peucker (RDP) Simplification**: Automatically simplifies dense edge points by 70%–90% while preserving sharp line detail (`epsilon` parameter).
+- **🗺️ Greedy TSP Path Optimization**: Reorders contours by endpoint proximity to minimize pen-up mouse travel distance across the canvas.
+- **🖼️ Live Sketch Preview & Controls**: Interactive UI with real-time vector preview canvas, Canny edge sliders, smoothness control, noise filtering, and a live progress bar.
 
-## 4. How to Use
+---
 
-1.  **Prepare the Emulator:**
-    * Open BlueStacks and the Instagram app.
-    * Go to your DMs and open the conversation where you want to draw.
+## 1. Prerequisites & Setup
 
-2.  **Run the Script:**
-    * Run the main script from your terminal:
-        ```sh
-        python main.py
-        ```
-    * The **AutoDoodle Control Panel** GUI will appear.
+1. **Python 3.8+**: Make sure Python is installed and added to your system PATH.
+2. **Android Emulator (e.g. BlueStacks)**: Instagram app running and logged in.
+3. **Install Requirements**:
+   ```sh
+   pip install -r requirements.txt
+   ```
 
-3.  **Using the GUI:**
-    * **Step 0: Select Image:** Click "Select Image" and choose the picture you want to draw.
-    * **Step 1: Calibrate:** Click "1. Calibrate Canvas". The GUI will disappear.
-        * Follow the prompts in that terminal (click top-left, then bottom-right of the drawing area).
-        * The GUI will reappear when done.
-    * **Step 2: Start:** Click "2. Start Drawing". The bot will now take over your mouse.
-    * **Step 3: Select Color:** The bot will open the draw interface and pause. Select your color in the app, then **click your mouse** to confirm and start the drawing.
-    * **Console:** Check the "Show Console" box in the GUI to see a live feed of the bot's status and actions, all in one window.
+---
 
-## 5. Drawing Controls (Hotkeys)
+## 2. Quick Start
 
-* **PAUSE / RESUME:** Press the **'space'** key (or your key from `config.json`) to pause the drawing. This allows you to change colors. Press it again to resume.
-* **STOP:** To stop the bot completely, press and hold the **'q'** key (or your key from `config.json`).
+Run the main application:
+```sh
+python main.py
+```
+
+### Step-by-Step Usage:
+1. **Select Image**: Click **"Browse Image..."** to select any PNG/JPG file.
+2. **Tune Sketch Settings**: Adjust sliders (**Canny High/Low**, **Smoothness**, **Min Length**) with **Live Sketch Preview** updating in real time.
+3. **Calibrate Canvas**: Click **"1. Calibrate Canvas Area"**, then click the **top-left** and **bottom-right** corners of your emulator's drawing canvas.
+4. **Start Drawing**: Click **"2. Start Drawing!"**. When prompted, select your color in Instagram DM and click your mouse anywhere to unleash the bot.
+
+---
+
+## 3. Hotkeys & Controls
+
+- **PAUSE / RESUME**: Press **`SPACE`** to pause drawing (e.g., to change colors or pen thickness), then press **`SPACE`** again to resume.
+- **EMERGENCY STOP**: Press **`Q`** at any time to immediately cancel drawing and release mouse buttons.
