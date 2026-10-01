@@ -44,8 +44,9 @@ Auto-Doodle-Insta/
 │   └── sketch_*.png
 │
 ├── main.py                          # GUI Application Entry Point (Tkinter / ttkbootstrap)
+├── pyproject.toml                   # uv & Python project configuration
 ├── config.json                      # Bot & drawing configurations
-├── requirements.txt                 # Dependencies
+├── requirements.txt                 # Dependencies fallback
 └── README.md                        # Documentation
 ```
 
@@ -59,26 +60,35 @@ Auto-Doodle-Insta/
 - **🎨 Full-Spectrum Multi-Layer Painting (`src/painter_engine.py`)**: K-Means clustering color quantization with automatic Instagram DM palette spectrum mapping.
 - **📉 Ramer-Douglas-Peucker (RDP) Simplification**: Automatically simplifies dense edge points by 70%–90% while preserving sharp line detail (`epsilon` parameter).
 - **🗺️ Greedy TSP Path Optimization**: Reorders contours by endpoint proximity to minimize pen-up mouse travel distance across the canvas.
+- **🚀 Ultra-Fast UV Package Management**: Managed with `uv` for sub-second virtualenv resolution and execution.
 - **🖼️ Live Sketch Preview & Controls**: Interactive UI with real-time vector preview canvas, Canny edge sliders, smoothness control, noise filtering, and a live progress bar.
 
 ---
 
 ## 1. Prerequisites & Setup
 
-1. **Python 3.8+**: Make sure Python is installed and added to your system PATH.
-2. **Android Emulator (e.g. BlueStacks)**: Instagram app running and logged in.
-3. **Install Requirements**:
+1. **Python 3.10+** (hoặc để `uv` tự động quản lý phiên bản Python).
+2. **Android Emulator (e.g. BlueStacks)**: Chạy ứng dụng Instagram ở chế độ Direct Message / Story Canvas.
+3. **Cài đặt & Khởi chạy bằng `uv` (Khuyến nghị)**:
+   ```sh
+   # Tự động cài dependencies và khởi chạy ứng dụng:
+   uv run main.py
+   ```
+   *(Hoặc cài đặt trước qua `uv sync` rồi chạy `uv run main.py`)*
+
+   *Fallback với pip truyền thống:*
    ```sh
    pip install -r requirements.txt
+   python main.py
    ```
 
 ---
 
 ## 2. Quick Start
 
-Run the main application:
+Chạy ứng dụng nhanh chóng chỉ với 1 lệnh:
 ```sh
-python main.py
+uv run main.py
 ```
 
 ### Step-by-Step Usage:
