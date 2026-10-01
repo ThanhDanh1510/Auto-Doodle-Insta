@@ -70,8 +70,8 @@ def generate_sketch_contours(
             log_status(f"{Fore.RED}Error: Full painting generation failed.")
             return None, None, None, None
 
-        total_contours = int(sum(len(g["contours"]) for g in layers))
-        total_points = int(sum(sum(len(c) for c in g["contours"]) for g in layers))
+        total_contours = sum(len(g["contours"]) for g in layers)
+        total_points = sum(sum(len(c) for c in g["contours"]) for g in layers)
 
         stats: ProcessStats = {
             "total_contours": total_contours,
@@ -167,12 +167,12 @@ def generate_sketch_contours(
                 "contours": group_contours,
             })
 
-    total_contours = int(sum(len(g["contours"]) for g in color_groups))
-    simplified_point_count = int(sum(sum(len(c) for c in g["contours"]) for g in color_groups))
-    orig_pts = int(original_point_count)
+    total_contours = sum(len(g["contours"]) for g in color_groups)
+    simplified_point_count = sum(sum(len(c) for c in g["contours"]) for g in color_groups)
+    orig_pts = original_point_count
     reduction = 0.0
     if orig_pts > 0:
-        reduction = float((1.0 - (float(simplified_point_count) / float(orig_pts))) * 100.0)
+        reduction = float((1.0 - (simplified_point_count / orig_pts)) * 100.0)
 
     stats_data: ProcessStats = {
         "total_contours": total_contours,
