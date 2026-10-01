@@ -18,9 +18,8 @@ import tkinter as tk
 from tkinter import filedialog, messagebox
 from tkinter.scrolledtext import ScrolledText
 import ttkbootstrap as ttk
-from ttkbootstrap.constants import (
+from tkinter.constants import (
     BOTH, HORIZONTAL, LEFT, RIGHT, X, Y, SUNKEN,
-    INFO, SUCCESS, DANGER, SECONDARY, PRIMARY, WARNING,
     W, E, CENTER, DISABLED, NORMAL, WORD, END
 )
 
@@ -173,7 +172,7 @@ class AutoDoodleApp:
         img_lf = ttk.Labelframe(left_frame, text="1. Image Selection", padding=10)
         img_lf.pack(fill=X, pady=(0, 10))
 
-        btn_select = ttk.Button(img_lf, text="Browse Image...", command=self.select_image, bootstyle=INFO)
+        btn_select = ttk.Button(img_lf, text="Browse Image...", command=self.select_image, bootstyle="info")
         btn_select.pack(side=LEFT, padx=(0, 10))
 
         self.lbl_image_name = ttk.Label(img_lf, text=os.path.basename(selected_image_path), relief=SUNKEN, padding=5)
@@ -183,13 +182,13 @@ class AutoDoodleApp:
         preset_lf = ttk.Labelframe(left_frame, text="2. Reconstruction Mode & Presets", padding=10)
         preset_lf.pack(fill=X, pady=(0, 10))
 
-        btn_p_full = ttk.Button(preset_lf, text="🎨 Full Painting (Tái tạo ảnh gốc)", command=self.apply_full_painting, bootstyle=SUCCESS)
+        btn_p_full = ttk.Button(preset_lf, text="🎨 Full Painting (Tái tạo ảnh gốc)", command=self.apply_full_painting, bootstyle="success")
         btn_p_full.pack(side=LEFT, fill=X, expand=True, padx=2)
 
-        btn_p_high = ttk.Button(preset_lf, text="🎯 Ultra Sketch (Paint Level)", command=self.apply_ultra_detail, bootstyle=DANGER)
+        btn_p_high = ttk.Button(preset_lf, text="🎯 Ultra Sketch (Paint Level)", command=self.apply_ultra_detail, bootstyle="danger")
         btn_p_high.pack(side=LEFT, fill=X, expand=True, padx=2)
 
-        btn_p_bal = ttk.Button(preset_lf, text="🖊️ Outline", command=self.apply_clean_outline, bootstyle=SECONDARY)
+        btn_p_bal = ttk.Button(preset_lf, text="🖊️ Outline", command=self.apply_clean_outline, bootstyle="secondary")
         btn_p_bal.pack(side=LEFT, fill=X, expand=True, padx=2)
 
         # 3. Fine Tuning Controls
@@ -272,19 +271,19 @@ class AutoDoodleApp:
         btn_grid = ttk.Frame(ctrl_lf)
         btn_grid.pack(fill=X)
 
-        self.btn_calibrate = ttk.Button(btn_grid, text="1. Calibrate Canvas", command=self.start_calibration, bootstyle=PRIMARY)
+        self.btn_calibrate = ttk.Button(btn_grid, text="1. Calibrate Canvas", command=self.start_calibration, bootstyle="primary")
         self.btn_calibrate.pack(side=LEFT, fill=X, expand=True, padx=(0, 2), pady=2)
 
-        self.btn_calib_color = ttk.Button(btn_grid, text="Calibrate Spectrum Bar", command=self.start_color_bar_calibration, bootstyle=SECONDARY)
+        self.btn_calib_color = ttk.Button(btn_grid, text="Calibrate Spectrum Bar", command=self.start_color_bar_calibration, bootstyle="secondary")
         self.btn_calib_color.pack(side=RIGHT, fill=X, expand=True, padx=(2, 0), pady=2)
 
-        self.btn_draw = ttk.Button(ctrl_lf, text="2. Start Full Image Reconstruction!", command=self.start_drawing, bootstyle=SUCCESS)
+        self.btn_draw = ttk.Button(ctrl_lf, text="2. Start Full Image Reconstruction!", command=self.start_drawing, bootstyle="success")
         self.btn_draw.pack(fill=X, pady=3)
 
         lbl_hotkeys = ttk.Label(
             ctrl_lf, 
             text=f"Hotkeys: Pause = '{config.get('pause_key','space').upper()}' | Stop = '{config.get('stop_key','q').upper()}'",
-            bootstyle=WARNING
+            bootstyle="warning"
         )
         lbl_hotkeys.pack(anchor=CENTER, pady=(5, 0))
 
@@ -295,7 +294,7 @@ class AutoDoodleApp:
         self.preview_canvas = tk.Canvas(prev_lf, bg="#1a1a2e", highlightthickness=0)
         self.preview_canvas.pack(fill=BOTH, expand=True)
 
-        self.lbl_stats = ttk.Label(prev_lf, text="Layers: 0 | Strokes: 0", bootstyle=INFO)
+        self.lbl_stats = ttk.Label(prev_lf, text="Layers: 0 | Strokes: 0", bootstyle="info")
         self.lbl_stats.pack(anchor=W, pady=(5, 0))
 
         prog_frame = ttk.Frame(right_frame)
