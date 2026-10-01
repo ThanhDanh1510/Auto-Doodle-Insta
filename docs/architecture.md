@@ -41,9 +41,9 @@ sequenceDiagram
     autonumber
     actor User as Người dùng
     participant GUI as main.py (UI Thread)
-    participant Engine as painter_engine / image_processor
+    participant Engine as src.vision (Pipeline & Fill Engine)
     participant Worker as Background Drawing Thread
-    participant FastDrawer as src/drawer.py (Win32)
+    participant FastDrawer as src.automation (FastDrawer)
     participant IG as Instagram Canvas / BlueStacks
 
     User->>GUI: Chọn ảnh & tùy chỉnh thông số (Sliders/Modes)

@@ -31,8 +31,8 @@ if SRC_DIR not in sys.path:
 if BASE_DIR not in sys.path:
     sys.path.insert(0, BASE_DIR)
 
-import image_processor
-from drawer import FastDrawer
+from src.automation import FastDrawer
+from src.vision import generate_sketch_contours
 
 config: Dict[str, Any] = {}
 canvas_info: Optional[Tuple[int, int, int, int, float, float]] = None
@@ -399,7 +399,7 @@ class AutoDoodleApp:
             self.lbl_status.config(text="Status: No image selected.")
             return
 
-        groups, img_info, preview_img, stats = image_processor.generate_sketch_contours(
+        groups, img_info, preview_img, stats = generate_sketch_contours(
             selected_image_path,
             mode=config.get("edge_mode", "canny"),
             canny_lower=config.get("canny_lower", 30),

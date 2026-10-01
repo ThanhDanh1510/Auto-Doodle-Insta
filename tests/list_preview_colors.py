@@ -1,13 +1,13 @@
+import colorsys
 import os
 import sys
-import colorsys
 
-# Add src and root to sys.path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
-import painter_engine
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from src.vision import generate_full_painting_layers
 
 sample_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'assets', 'samples', 'Lily.png'))
-layers, info, preview = painter_engine.generate_full_painting_layers(sample_path, num_colors=12, fill_step=2)
+layers, info, preview = generate_full_painting_layers(sample_path, num_colors=12, fill_step=2)
+assert layers is not None
 
 def rgb_to_hex(rgb):
     return f"#{rgb[0]:02X}{rgb[1]:02X}{rgb[2]:02X}"
@@ -22,7 +22,7 @@ total_area = sum(l["area"] for l in layers)
 for i, l in enumerate(layers):
     rgb = l["rgb"]
     hex_code = rgb_to_hex(rgb)
-    h, s, v = colorsys.rgb_to_hsv(rgb[0]/255.0, rgb[1]/255.0, rgb[2]/255.0)
+    h, s, v = colorsys.rgb_to_hsv(rgb[0] / 255.0, rgb[1] / 255.0, rgb[2] / 255.0)
     h_deg = int(h * 360)
     s_pct = int(s * 100)
     v_pct = int(v * 100)

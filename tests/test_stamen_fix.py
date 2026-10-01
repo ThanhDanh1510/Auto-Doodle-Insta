@@ -1,9 +1,9 @@
+import colorsys
 import os
 import sys
-import colorsys
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
-import drawer
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from src.automation import get_spectrum_position
 
 # Modify rainbow_spectrum_pct to fix Olive Green -> Swatch 3 Green and Dark Maroon -> Swatch 1 Black
 colors = [

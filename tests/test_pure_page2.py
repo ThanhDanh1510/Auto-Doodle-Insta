@@ -1,9 +1,9 @@
+import colorsys
 import os
 import sys
-import colorsys
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
-import drawer
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from src.automation import warm_spectrum_pct
 
 colors = [
     ("Dark Rose",    (171, 77, 116)),
@@ -25,7 +25,7 @@ print(f"{'Layer Color':<15} {'RGB':<18} {'X%':<8} {'Y%':<8} {'Page 2 Swatch Targ
 print("-" * 80)
 
 for name, rgb in colors:
-    x, y = drawer.warm_spectrum_pct(rgb)
+    x, y = warm_spectrum_pct(rgb)
     
     if rgb == (84, 22, 29):
         desc = "Swatch 7/8 Dark Maroon (Đầu nhụy & đốm thẫm)"

@@ -25,27 +25,25 @@ Auto-Doodle-Insta/
 │   └── index.md                     # Documentation index
 │
 ├── src/                             # Core Python modules & Modular Subpackages
+│   ├── __init__.py                  # Package top-level exports
 │   ├── core/                        # Data models, types & shared constants
 │   │   ├── __init__.py
 │   │   ├── constants.py             # Instagram color palettes & spectrum enums
 │   │   └── models.py                # TypedDicts (Point2D, ContourPoints, LayerInfo, ...)
 │   ├── vision/                      # Computer vision & image processing algorithms
 │   │   ├── __init__.py
-│   │   ├── quantizer.py             # K-Means color quantization & white masking
-│   │   ├── edge_detector.py         # Canny, Bilateral & Adaptive edge extraction
-│   │   ├── simplifier.py            # Ramer-Douglas-Peucker (RDP) contour reduction
-│   │   ├── optimizer.py             # Greedy TSP stroke sequencing optimizer
 │   │   ├── color_matcher.py         # CIE-Lab perceptual Delta-E color distance
+│   │   ├── edge_detector.py         # Canny, Bilateral & Adaptive edge extraction
 │   │   ├── fill_engine.py           # Dense zig-zag scanline region filler
-│   │   └── pipeline.py              # High-level sketch extraction pipeline
-│   ├── automation/                  # Hardware automation & OS mouse control
-│   │   ├── __init__.py
-│   │   ├── input_driver.py          # Fast Win32 mouse_event / PyAutoGUI driver
-│   │   ├── spectrum_navigator.py    # Instagram 3-Page gradient spectrum mapper
-│   │   └── stroke_executor.py       # FastDrawer canvas stroke execution engine
-│   ├── drawer.py                    # Backward-compatible facade to src.automation
-│   ├── image_processor.py           # Backward-compatible facade to src.vision & src.core
-│   └── painter_engine.py            # Backward-compatible facade to src.vision
+│   │   ├── optimizer.py             # Greedy TSP stroke sequencing optimizer
+│   │   ├── pipeline.py              # High-level sketch extraction pipeline
+│   │   ├── quantizer.py             # K-Means color quantization & white masking
+│   │   └── simplifier.py            # Ramer-Douglas-Peucker (RDP) contour reduction
+│   └── automation/                  # Hardware automation & OS mouse control
+│       ├── __init__.py
+│       ├── input_driver.py          # Fast Win32 mouse_event / PyAutoGUI driver
+│       ├── spectrum_navigator.py    # Instagram 3-Page gradient spectrum mapper
+│       └── stroke_executor.py       # FastDrawer canvas stroke execution engine
 │
 ├── tests/                           # Unit tests, color analysis & lab experiment scripts
 │   ├── __init__.py
@@ -73,8 +71,8 @@ Auto-Doodle-Insta/
 
 ## Key Features & Speed Improvements
 
-- **⚡ Win32 Native Fast Drawing Engine (`src/drawer.py`)**: Uses Windows direct API calls (`mouse_event` / `SendInput`) to execute mouse strokes **10x–50x faster** than PyAutoGUI.
-- **🎨 Full-Spectrum Multi-Layer Painting (`src/painter_engine.py`)**: K-Means clustering color quantization with automatic Instagram DM palette spectrum mapping.
+- **⚡ Win32 Native Fast Drawing Engine (`src.automation`)**: Uses Windows direct API calls (`mouse_event` / `SendInput`) to execute mouse strokes **10x–50x faster** than PyAutoGUI.
+- **🎨 Full-Spectrum Multi-Layer Painting (`src.vision`)**: K-Means clustering color quantization with automatic Instagram DM palette spectrum mapping.
 - **📉 Ramer-Douglas-Peucker (RDP) Simplification**: Automatically simplifies dense edge points by 70%–90% while preserving sharp line detail (`epsilon` parameter).
 - **🗺️ Greedy TSP Path Optimization**: Reorders contours by endpoint proximity to minimize pen-up mouse travel distance across the canvas.
 - **🚀 Ultra-Fast UV Package Management**: Managed with `uv` for sub-second virtualenv resolution and execution.

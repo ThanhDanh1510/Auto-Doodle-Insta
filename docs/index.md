@@ -6,14 +6,14 @@ Chào mừng bạn đến với bộ tài liệu kỹ thuật chi tiết của h
 
 ## 🗺️ Mục Lục Tài Liệu (Documentation Index)
 
-| Tài liệu | Mô tả nội dung | Đối tượng / Mục đích |
+| Tài liệu | Mô tả nội dung | Phân hệ tương ứng |
 | :--- | :--- | :--- |
-| 🏗️ [1. Kiến trúc hệ thống (architecture.md)](file:///d:/AutoDoodle/docs/architecture.md) | Tổng quan kiến trúc đa tầng, luồng dữ liệu, hệ tọa độ chuẩn hóa, mô hình đa luồng và hệ thống hiệu chuẩn. | Nắm bắt toàn bộ luồng hoạt động của app |
-| 🎨 [2. Module Painter Engine (painter_engine.md)](file:///d:/AutoDoodle/docs/modules/painter_engine.md) | Phân tích K-Means clustering, thuật toán lọc thành phần liên thông, thuật toán quét nét Dense Zig-Zag Fill và tái tạo lớp màu. | Xử lý tái tạo ảnh màu đa lớp |
-| 🔍 [3. Module Image Processor (image_processor.md)](file:///d:/AutoDoodle/docs/modules/image_processor.md) | Phân tích Canny Edge, Ramer-Douglas-Peucker (RDP), giải thuật tối ưu hóa đường đi Greedy TSP và ánh xạ màu CIE-Lab. | Xử lý ảnh phác thảo vector & đường viền |
-| 🖱️ [4. Module Fast Drawer (drawer.md)](file:///d:/AutoDoodle/docs/modules/drawer.md) | Trình điều khiển chuột Win32 Native API, cơ chế giải mã dải màu Instagram Popover Spectrum, tự động vuốt trang và xử lý ngắt. | Giao tiếp phần cứng & tự động hóa nét vẽ |
-| 🖥️ [5. Module GUI & Điều Phối (main_gui.md)](file:///d:/AutoDoodle/docs/modules/main_gui.md) | Kiến trúc giao diện Tkinter/ttkbootstrap, cơ chế Live Preview Debounce, Template Matching và Console Stream Redirector. | Giao diện điều khiển & trải nghiệm người dùng |
-| ⚙️ [6. Hướng dẫn Cấu Hình (configuration.md)](file:///d:/AutoDoodle/docs/configuration.md) | Giải thích chi tiết toàn bộ các trường trong `config.json`, các profile cài đặt mẫu và mẹo tinh chỉnh hiệu năng. | Tùy biến và cấu hình bot |
+| 🏗️ [1. Kiến trúc hệ thống (architecture.md)](file:///d:/AutoDoodle/docs/architecture.md) | Tổng quan kiến trúc đa tầng, luồng dữ liệu, hệ tọa độ chuẩn hóa, mô hình đa luồng và hệ thống hiệu chuẩn. | Toàn hệ thống |
+| 📦 [2. Phân hệ Core Models (modules/core.md)](file:///d:/AutoDoodle/docs/modules/core.md) | Cấu trúc dữ liệu tĩnh (`TypedDict`, `RGBColor`, `ContourPoints`), bảng màu mặc định Instagram DM và enum chế độ `SpectrumPage`. | `src/core/` |
+| 🧠 [3. Phân hệ Thị Giác Máy Tính (modules/vision.md)](file:///d:/AutoDoodle/docs/modules/vision.md) | K-Means quantization, bộ lọc Canny/Bilateral/Adaptive, RDP simplification, Greedy TSP optimization, Zig-Zag scanline fill. | `src/vision/` |
+| ⚡ [4. Phân hệ Tự Động Hóa (modules/automation.md)](file:///d:/AutoDoodle/docs/modules/automation.md) | Driver chuột Win32 Native API (120+ FPS), điều hướng dải màu Instagram Popover 3 trang và động cơ thực thi `FastDrawer`. | `src/automation/` |
+| 🖥️ [5. Giao Diện Người Dùng (modules/main_gui.md)](file:///d:/AutoDoodle/docs/modules/main_gui.md) | Kiến trúc giao diện Tkinter/ttkbootstrap, cơ chế Live Preview Debounce, Template Matching và Console Stream Redirector. | `main.py` |
+| ⚙️ [6. Hướng dẫn Cấu Hình (configuration.md)](file:///d:/AutoDoodle/docs/configuration.md) | Giải thích chi tiết toàn bộ các trường trong `config.json`, các profile cài đặt mẫu và mẹo tinh chỉnh hiệu năng. | Cấu hình bot |
 
 ---
 
@@ -24,7 +24,7 @@ flowchart TD
     A[🖼️ Ảnh đầu vào: PNG / JPG] --> B{Chế độ vẽ đã chọn}
     
     %% Nhánh Full Painting
-    B -->|full_painting| C[🎨 painter_engine.py]
+    B -->|full_painting| C[🎨 src.vision.fill_engine]
     C --> C1[K-Means Clustering Quantization]
     C1 --> C2[Lọc nhiễu Connected Components]
     C2 --> C3[Tạo nét Dense Fill Zig-Zag]
@@ -32,7 +32,7 @@ flowchart TD
     C4 --> C5[Sắp xếp lớp theo diện tích giảm dần]
     
     %% Nhánh Sketch / Contour
-    B -->|monochrome / spectrum| D[🔍 image_processor.py]
+    B -->|monochrome / spectrum| D[🔍 src.vision.pipeline]
     D --> D1[Gaussian Blur / Bilateral Filter]
     D1 --> D2[Canny Edge Detection]
     D2 --> D3[Ramer-Douglas-Peucker Simplification]
@@ -47,7 +47,7 @@ flowchart TD
     E --> F[🖥️ main.py: Live Preview Canvas]
     
     %% Thực thi chuột Win32
-    F --> G[🚀 FastDrawer: src/drawer.py]
+    F --> G[🚀 src.automation.FastDrawer]
     G --> G1[Instagram Spectrum Popover Selector]
     G1 --> G2[Win32 Native mouse_event 65535 coord]
     G2 --> H[📱 Canvas Android Emulator / Instagram DM]
@@ -70,20 +70,35 @@ AutoDoodle/
 │       └── Lily.png
 │
 ├── 📁 docs/                            # Toàn bộ tài liệu kỹ thuật chi tiết
-│   ├── 📁 modules/                     # Tài liệu chuyên sâu cho từng module
-│   │   ├── drawer.md
-│   │   ├── image_processor.md
-│   │   ├── main_gui.md
-│   │   └── painter_engine.md
-│   ├── architecture.md
-│   ├── configuration.md
-│   └── index.md
+│   ├── 📁 modules/                     # Tài liệu chuyên sâu cho từng phân hệ
+│   │   ├── automation.md               # Win32 driver, spectrum navigator, FastDrawer
+│   │   ├── core.md                     # Data models, types, constants
+│   │   ├── main_gui.md                 # Tkinter GUI, calibration & queues
+│   │   └── vision.md                   # Vision, quantization, RDP, TSP, fill engine
+│   ├── architecture.md                 # Kiến trúc hệ thống tổng quan & luồng dữ liệu
+│   ├── configuration.md                # Cấu hình config.json và preset
+│   └── index.md                        # Trang chủ tài liệu
 │
-├── 📁 src/                             # Mã nguồn module cốt lõi
-│   ├── __init__.py
-│   ├── drawer.py                       # Win32 Native Mouse Controller & Palette Navigator
-│   ├── image_processor.py              # Edge Detection, RDP & Contour TSP Optimizer
-│   └── painter_engine.py               # K-Means Quantization & Multi-layer Painting Engine
+├── 📁 src/                             # Mã nguồn phân hệ cốt lõi
+│   ├── __init__.py                     # Package top-level exports
+│   ├── 📁 core/                        # Data models, types & shared constants
+│   │   ├── __init__.py
+│   │   ├── constants.py                # Bảng màu Instagram DM, Enum SpectrumPage
+│   │   └── models.py                   # TypedDicts (Point2D, ContourPoints, LayerInfo, ...)
+│   ├── 📁 vision/                      # Computer vision & image processing algorithms
+│   │   ├── __init__.py
+│   │   ├── color_matcher.py            # CIE-Lab Delta-E color distance & sampling
+│   │   ├── edge_detector.py            # Canny, Bilateral & Adaptive edge extraction
+│   │   ├── fill_engine.py              # Dense zig-zag scanline region filler
+│   │   ├── optimizer.py                # Greedy TSP stroke sequencing optimizer
+│   │   ├── pipeline.py                 # High-level sketch extraction pipeline
+│   │   ├── quantizer.py                # K-Means color quantization & white masking
+│   │   └── simplifier.py               # Ramer-Douglas-Peucker (RDP) contour reduction
+│   └── 📁 automation/                  # Hardware automation & OS mouse control
+│       ├── __init__.py
+│       ├── input_driver.py             # Fast Win32 mouse_event / PyAutoGUI driver
+│       ├── spectrum_navigator.py       # Instagram 3-Page gradient spectrum mapper
+│       └── stroke_executor.py          # FastDrawer canvas stroke execution engine
 │
 ├── 📁 tests/                           # 19 script thử nghiệm, phân tích màu và unit test
 │   ├── __init__.py
@@ -96,8 +111,9 @@ AutoDoodle/
 │   └── sketch_*.png
 │
 ├── main.py                             # Điểm khởi chạy giao diện GUI chính
+├── pyproject.toml                      # Cấu hình gói và phụ thuộc (uv package manager)
 ├── config.json                         # File cấu hình hoạt động của bot
-├── requirements.txt                    # Danh sách thư viện Python phụ thuộc
+├── requirements.txt                    # Danh sách thư viện Python phụ thuộc fallback
 ├── .gitignore                          # Cấu hình bỏ qua outputs/, cache, file rác
 └── README.md                           # Tài liệu tổng quan dự án
 ```
